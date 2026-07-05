@@ -60,7 +60,7 @@ class Solution {
         }
 
         if (ways[0][0] == 0)
-            return new int[]{0, 0};
+            return new int[]{0, 0};;
 
         return new int[]{score[0][0], ways[0][0]};
     }
