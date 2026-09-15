@@ -1,34 +1,20 @@
 class Solution {
     public int[] sortArray(int[] nums) {
-        quickSort(nums, 0, nums.length - 1);
-        return nums;
-    }
+        int[] count = new int[100001];
 
-    void quickSort(int[] a, int l, int r) {
-        while (l < r) {
-            int i = l, j = r;
-            int pivot = a[l + (r - l) / 2];
+        for (int x : nums) {
+            count[x + 50000]++;
+        }
 
-            while (i <= j) {
-                while (a[i] < pivot) i++;
-                while (a[j] > pivot) j--;
+        int k = 0;
 
-                if (i <= j) {
-                    int t = a[i];
-                    a[i] = a[j];
-                    a[j] = t;
-                    i++;
-                    j--;
-                }
-            }
-
-            if (j - l < r - i) {
-                if (l < j) quickSort(a, l, j);
-                l = i;
-            } else {
-                if (i < r) quickSort(a, i, r);
-                r = j;
+        for (int i = 0; i < 100001; i++) {
+            while (count[i] > 0) {
+                nums[k++] = i - 50000;
+                count[i]--;
             }
         }
+
+        return nums;
     }
 }
