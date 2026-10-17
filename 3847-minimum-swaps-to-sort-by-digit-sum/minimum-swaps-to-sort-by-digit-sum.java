@@ -1,55 +1,44 @@
 class Solution {
+
     public int minSwaps(int[] nums) {
         int n = nums.length;
-
-        int[][] arr = new int[n][3];
-
+        int[] digitSum = new int[n];
         for (int i = 0; i < n; i++) {
-            int curr = nums[i];
-            int digitSum = 0;
-
-            while (curr > 0) {
-                digitSum += curr % 10;
-                curr /= 10;
+            int x = nums[i],
+                sum = 0;
+            while (x > 0) {
+                sum += x % 10;
+                x /= 10;
             }
-
-            arr[i][0] = digitSum;
-            arr[i][1] = nums[i];
-            arr[i][2] = i;
+            digitSum[i] = sum;
         }
 
-        Arrays.sort(arr, (a, b) -> {
-            if (a[0] != b[0]) {
-                return Integer.compare(a[0], b[0]);
+        Integer[] indices = new Integer[n];
+        for (int i = 0; i < n; i++) {
+            indices[i] = i;
+        }
+        Arrays.sort(indices, (a, b) -> {
+            if (digitSum[a] != digitSum[b]) {
+                return Integer.compare(digitSum[a], digitSum[b]);
             }
-
-            if (a[1] != b[1]) {
-                return Integer.compare(a[1], b[1]);
-            }
-
-            return Integer.compare(a[2], b[2]);
+            return Integer.compare(nums[a], nums[b]);
         });
 
-        int[] perm = new int[n];
-
-        for (int i = 0; i < n; i++) {
-            perm[i] = arr[i][2];
+        int[] targetPos = new int[n];
+        for (int pos = 0; pos < n; pos++) {
+            targetPos[indices[pos]] = pos;
         }
 
         boolean[] visited = new boolean[n];
         int cycles = 0;
-
         for (int i = 0; i < n; i++) {
-            if (visited[i]) {
-                continue;
-            }
-
-            cycles++;
-            int j = i;
-
-            while (!visited[j]) {
-                visited[j] = true;
-                j = perm[j];
+            if (!visited[i]) {
+                cycles++;
+                int j = i;
+                while (!visited[j]) {
+                    visited[j] = true;
+                    j = targetPos[j];
+                }
             }
         }
 
